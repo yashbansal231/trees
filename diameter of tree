@@ -1,0 +1,118 @@
+#include<iostream>
+#include <cstdlib>
+using namespace std;
+int maxi=0;
+ struct node
+    {
+         int data;                 //Data element
+         struct node * left;          //Pointer to left node
+         struct node * right;         //Pointer to right node
+    };
+    struct node* head;
+     struct node * newnode(int element)
+    {
+        struct node * temp=(node * )malloc(sizeof(node));
+        temp->data=element;
+        temp->left=temp->right=NULL;
+        return temp;
+    }
+void printInorder(struct node* node)
+{
+     if (node == NULL)
+          return;
+ 
+     /* first recur on left child */
+     printInorder(node->left);
+ 
+     /* then print the data of node */
+     printf("%d ", node->data);  
+ 
+     /* now recur on right child */
+     printInorder(node->right);
+}
+
+int maxDepth(struct node* node) 
+    {
+        if (node==NULL) 
+            return 0;
+        else
+        {
+             /* compute the depth of each subtree */
+              int lDepth = maxDepth(node->left);
+              int rDepth = maxDepth(node->right);
+
+              /* use the larger one */
+              if (lDepth > rDepth) 
+                   {if(lDepth+1+rDepth+1>maxi)
+                   maxi=lDepth+1+rDepth+1;
+                       return(lDepth+1);
+                       
+                   }
+              else 
+                   {
+                       if(lDepth+1+rDepth+1>maxi)
+                   maxi=lDepth+1+rDepth+1;
+                   return(rDepth+1);}
+                   
+       }
+    }
+   
+    
+    
+int main()
+{
+    
+    int nn;
+    cin>>nn;
+    int vn;
+    cin>>vn;
+    struct node * temp1=(node * )malloc(sizeof(node));
+    temp1->data=vn;
+    temp1->left=temp1->right=NULL;
+    
+    head=temp1;
+    for(int i=0; i<(nn-1); i++)
+    {temp1=head;
+        struct node* nnode;
+        struct node* snode;
+        string dir;
+        cin>>dir;
+        int nval;
+        cin>>nval;
+        nnode=newnode(nval);
+        for(unsigned int j=0; j<dir.length()-1; j++)
+        {
+            if(dir[j]=='L')
+            {
+                if(temp1->left==NULL)
+                {snode=newnode(-1);
+                
+                    temp1->left=snode;
+                }
+                temp1=temp1->left;
+            }
+            else
+            {
+                if(temp1->right==NULL)
+                {snode=newnode(-1);
+                
+                    temp1->right=snode;
+                }
+                temp1=temp1->right;
+            }
+        }
+        if(dir[dir.length()-1]=='L')
+            if(temp1->left==NULL)
+            temp1->left=nnode;
+            else
+            temp1->left->data=nnode->data;
+        else
+            if(temp1->right==NULL)
+            temp1->right=nnode;
+            else
+            temp1->right->data=nnode->data;
+    }
+    int md=maxDepth(head);
+   cout<<maxi-1;
+    
+}
